@@ -39,16 +39,16 @@ public:
   Fsm(State* initial_state);
   ~Fsm();
 
-  void add_transition(State* state_from, State* state_to, String event,
+  void add_transition(State* state_from, State* state_to, int event,
                       void (*on_transition)());
-  void trigger(String event);
+  void trigger(int event);
 
 private:
   struct Transition
   {
     State* state_from;
     State* state_to;
-    String event;
+    int event;
     void (*on_transition)();
   };
 

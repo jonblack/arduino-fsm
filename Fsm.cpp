@@ -38,7 +38,7 @@ Fsm::~Fsm()
 }
 
 
-void Fsm::add_transition(State* state_from, State* state_to, String event,
+void Fsm::add_transition(State* state_from, State* state_to, int event,
                          void (*on_transition)())
 {
   if (state_from == NULL || state_to == NULL)
@@ -57,7 +57,7 @@ void Fsm::add_transition(State* state_from, State* state_to, String event,
 }
 
 
-void Fsm::trigger(String event)
+void Fsm::trigger(int event)
 {
   // Find the transition with the current state and given event.
   Transition transition;

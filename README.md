@@ -20,6 +20,7 @@ feature branch.
 * Add library.properties
 * Add keywords.txt
 * Remove name attribute from state
+* Use int for transition event instead of string
 
 **1.0.0 - 24/12/2013**
 
