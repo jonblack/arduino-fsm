@@ -30,8 +30,8 @@ void on_trans_light_off_light_on()
   Serial.println("Transitioning from LIGHT_OFF to LIGHT_ON");
 }
 
-State state_light_on("LIGHT_ON", on_light_on_enter, &on_light_on_exit);
-State state_light_off("LIGHT_OFF", on_light_off_enter, &on_light_off_exit);
+State state_light_on(on_light_on_enter, &on_light_on_exit);
+State state_light_off(on_light_off_enter, &on_light_off_exit);
 Fsm fsm(&state_light_off);
 
 void setup()

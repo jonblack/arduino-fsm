@@ -19,6 +19,7 @@ feature branch.
 * Remove AUTHORS files: too much hassle to maintain
 * Add library.properties
 * Add keywords.txt
+* Remove name attribute from state
 
 **1.0.0 - 24/12/2013**
 

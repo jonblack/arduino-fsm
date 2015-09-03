@@ -26,9 +26,8 @@
 
 struct State
 {
-  State(String name, void (*on_enter)(), void (*on_exit)());
+  State(void (*on_enter)(), void (*on_exit)());
 
-  String name;
   void (*on_enter)();
   void (*on_exit)();
 };

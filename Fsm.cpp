@@ -16,9 +16,8 @@
 #include "Fsm.h"
 
 
-State::State(String name, void (*on_enter)(), void (*on_exit)())
-: name(name),
-  on_enter(on_enter),
+State::State(void (*on_enter)(), void (*on_exit)())
+: on_enter(on_enter),
   on_exit(on_exit)
 {
 }
