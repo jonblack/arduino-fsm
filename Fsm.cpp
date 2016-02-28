@@ -116,9 +116,7 @@ void Fsm::check_timer()
       }
       else
       {
-        unsigned long now = millis();
-        Serial.println(now);
-        if (now - transition->start >= transition->interval)
+        if (millis() - transition->start >= transition->interval)
         {
           m_current_state = transition->transition.make_transition();
           transition->start = 0;
