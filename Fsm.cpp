@@ -26,7 +26,8 @@ State::State(void (*on_enter)(), void (*on_exit)())
 Fsm::Fsm(State* initial_state)
 : m_current_state(initial_state),
   m_transitions(NULL),
-  m_num_transitions(0)
+  m_num_transitions(0),
+  m_initialized(false)
 {
 }
 
@@ -96,6 +97,14 @@ void Fsm::trigger(int event)
     if (m_transitions[i].state_from == m_current_state &&
         m_transitions[i].event == event)
     {
+      if (! m_initialized)
+      {
+        m_initialized = true;
+        if (m_transitions[i].state_from->on_enter != NULL)
+        {
+          m_transitions[i].state_from->on_enter();
+        }
+      }
       m_current_state = m_transitions[i].make_transition();
       return;
     }
@@ -112,12 +121,20 @@ void Fsm::check_timer()
     {
       if (transition->start == 0)
       {
+        if (! m_initialized)
+        {
+          m_initialized = true;
+          if (transition->transition.state_from->on_enter != NULL)
+          {
+            transition->transition.state_from->on_enter();
+          }
+        }
         transition->start = millis();
       }
       else
       {
         unsigned long now = millis();
-        Serial.println(now);
+        //Serial.println(now); //jfm
         if (now - transition->start >= transition->interval)
         {
           m_current_state = transition->transition.make_transition();
