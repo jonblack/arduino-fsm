@@ -66,7 +66,7 @@ void Fsm::add_timed_transition(State* state_from, State* state_to,
 
   TimedTransition timed_transition;
   timed_transition.transition = transition;
-  timed_transition.start = 0;
+  timed_transition.start = millis();
   timed_transition.interval = interval;
 
   m_timed_transitions = (TimedTransition*) realloc(
@@ -97,6 +97,7 @@ void Fsm::trigger(int event)
         m_transitions[i].event == event)
     {
       m_current_state = m_transitions[i].make_transition();
+      update_timed_transitions_starts();
       return;
     }
   }
@@ -110,17 +111,10 @@ void Fsm::check_timer()
     TimedTransition* transition = &m_timed_transitions[i];
     if (transition->transition.state_from == m_current_state)
     {
-      if (transition->start == 0)
+      if (millis() - transition->start >= transition->interval)
       {
-        transition->start = millis();
-      }
-      else
-      {
-        if (millis() - transition->start >= transition->interval)
-        {
-          m_current_state = transition->transition.make_transition();
-          transition->start = 0;
-        }
+        m_current_state = transition->transition.make_transition();
+        update_timed_transitions_starts();
       }
     }
   }
@@ -140,4 +134,17 @@ State* Fsm::Transition::make_transition()
     state_to->on_enter();
 
   return state_to;
+}
+
+void Fsm::update_timed_transitions_starts()
+{
+  const unsigned long millis_value = millis();
+
+  for (int i = 0; i < m_num_timed_transitions; ++i)
+  {
+    TimedTransition* transition = &m_timed_transitions[i];
+
+    if (transition->transition.state_from == m_current_state)
+      transition->start = millis_value;
+  }
 }
