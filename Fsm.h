@@ -72,6 +72,7 @@ private:
   State* m_current_state;
   Transition* m_transitions;
   int m_num_transitions;
+  boolean m_initialized;
 
   TimedTransition* m_timed_transitions;
   int m_num_timed_transitions;
