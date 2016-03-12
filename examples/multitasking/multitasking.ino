@@ -2,7 +2,7 @@
 // multitasking on an arduino. Two LED's are turned on and off at irregular
 // intervals; the finite state machines take care of the transitions.
 
-#include <Fsm.h>
+#include "Fsm.h"
 
 #define LED1_PIN 10
 #define LED2_PIN 11
@@ -27,11 +27,11 @@ void on_led2_off_enter() {
     digitalWrite(LED2_PIN, LOW);
 }
 
-State state_led1_on(&on_led1_on_enter, NULL);
-State state_led1_off(&on_led1_off_enter, NULL);
+State state_led1_on(&on_led1_on_enter, NULL, NULL);
+State state_led1_off(&on_led1_off_enter, NULL, NULL);
 
-State state_led2_on(&on_led2_on_enter, NULL);
-State state_led2_off(&on_led2_off_enter, NULL);
+State state_led2_on(&on_led2_on_enter, NULL, NULL);
+State state_led2_off(&on_led2_off_enter, NULL, NULL);
 
 Fsm fsm_led1(&state_led1_off);
 Fsm fsm_led2(&state_led2_off);
@@ -50,8 +50,8 @@ void setup() {
 
 
 void loop() {
-    fsm_led1.check_timer();
-    fsm_led2.check_timer();
-
-    delay(100);
+    fsm_led1.run_machine();
+    fsm_led2.run_machine();
+    delay(200);
 }
+

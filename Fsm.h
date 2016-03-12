@@ -26,9 +26,9 @@
 
 struct State
 {
-  State(void (*on_enter)(), void (*on_exit)());
-
+  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
   void (*on_enter)();
+  void (*on_state)();
   void (*on_exit)();
 };
 
@@ -45,8 +45,10 @@ public:
   void add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
+  void check_timed_transitions();
+
   void trigger(int event);
-  void check_timer();
+  void run_machine();
 
 private:
   struct Transition
@@ -56,7 +58,6 @@ private:
     int event;
     void (*on_transition)();
 
-    State* make_transition();
   };
   struct TimedTransition
   {
@@ -68,6 +69,8 @@ private:
   static Transition create_transition(State* state_from, State* state_to,
                                       int event, void (*on_transition)());
 
+  void make_transition(Transition* transition);
+
 private:
   State* m_current_state;
   Transition* m_transitions;
@@ -75,6 +78,7 @@ private:
 
   TimedTransition* m_timed_transitions;
   int m_num_timed_transitions;
+  bool m_initialized;
 };
 
 

@@ -18,6 +18,18 @@ feature branch.
 
 # Changelog
 
+**2.2.0 - 12/03/2016**
+
+* Add `on_state()` handler to states
+* New `run_machine()` method to invoke machine execution (includes a `check_timed_transitions()` call)
+* New `timed_switchoff.ino` example sketch to ilustrate new `on_state()` and `run_machine()` funcionality
+* Corrections:
+ - `make_transition()` correctly initialices timed transitions start milliseconds (`make_transition()` is now a fsm method)
+ - Initial state `on_enter()` handler is now correctly executed on fsm first run
+ - Removed `Serial.println(now);` trace in _Fsm.cpp_
+ - Correct initialization of `m_num_timed_transitions`
+ 
+
 **2.1.0 - 21/11/2015**
 
 * Add timed transitions
