@@ -46,12 +46,14 @@ void setup() {
     fsm_led1.add_timed_transition(&state_led1_on, &state_led1_off, 3000, NULL);
     fsm_led2.add_timed_transition(&state_led2_off, &state_led2_on, 1000, NULL);
     fsm_led2.add_timed_transition(&state_led2_on, &state_led2_off, 2000, NULL);
+
+    fsm_led1.init();
+    fsm_led2.init();
 }
 
-
 void loop() {
-    fsm_led1.run_machine();
-    fsm_led2.run_machine();
+    fsm_led1.process();
+    fsm_led2.process();
     delay(200);
 }
 

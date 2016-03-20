@@ -1,12 +1,9 @@
-#include "Fsm.h"
-
 /*
- * FSM Library sample with user and timed 
- * transitions.
- * Uses a button and Arduino builtin led, 
- * button can be replaced just grounding 
- * pin.
+ * FSM Library sample with user and timed transitions.  Uses a button and
+ * Arduino builtin led, button can be replaced just grounding pin.
  */
+
+#include "Fsm.h"
 
 // Used pins
 #define LED_PIN     13
@@ -52,7 +49,7 @@ void check_button()
 void setup()
 {
   Serial.begin(9600);
-  
+
   pinMode(LED_PIN, OUTPUT);
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
@@ -60,12 +57,13 @@ void setup()
                      BUTTON_EVENT, NULL);
   fsm.add_timed_transition(&state_led_on, &state_led_off, 3000, NULL);
   fsm.add_transition(&state_led_on, &state_led_off, BUTTON_EVENT, NULL);
+  fsm.init();
   Serial.println("Setup END");
 }
 
 void loop()
 {
   // Call fsm run
-  fsm.run_machine();
+  fsm.process();
   delay(100);
 }

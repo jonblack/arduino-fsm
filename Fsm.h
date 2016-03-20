@@ -39,16 +39,51 @@ public:
   Fsm(State* initial_state);
   ~Fsm();
 
+  /**
+   * add_transition
+   *
+   * Adds a transition from `state_from` to `state_to` when `event` is
+   * triggered. `on_transition` is called when the transition occurs.
+   */
   void add_transition(State* state_from, State* state_to, int event,
                       void (*on_transition)());
 
+  /**
+   * add_timed_transition
+   *
+   * Adds a timed transition from `state_from` to `state_to` when `interval`
+   * has elapsed. `on_transition` is called when the transition occurs.
+   */
   void add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
-  void check_timed_transitions();
+  /**
+   * init
+   *
+   * Initializes the machine, transitioning into the initial state by calling
+   * `on_enter` and `on_state`.
+   *
+   * This method should be called once, probably somewhere in `setup()`.
+   */
+  void init();
 
+  /**
+   * process
+   *
+   * Processes changes to the machine. Calls the `on_state` callback for the
+   * current state before checking if any timed transitions should be fired.
+   *
+   * This method should be called repeatedly, probably somewhere in `loop()`.
+   */
+  void process();
+
+  /**
+   * trigger
+   *
+   * Triggers a state change. The current state plus the given event determine
+   * which state the machine should transition into.
+   */
   void trigger(int event);
-  void run_machine();
 
 private:
   struct Transition
@@ -65,6 +100,8 @@ private:
     unsigned long start;
     unsigned long interval;
   };
+
+  void check_timed_transitions();
 
   static Transition create_transition(State* state_from, State* state_to,
                                       int event, void (*on_transition)());

@@ -38,7 +38,7 @@ void on_trans_light_off_light_on()
   Serial.println("Transitioning from LIGHT_OFF to LIGHT_ON");
 }
 
-// standard arduino functions
+// Standard arduino functions
 void setup()
 {
   Serial.begin(9600);
@@ -49,11 +49,13 @@ void setup()
   fsm.add_transition(&state_light_off, &state_light_on,
                      FLIP_LIGHT_SWITCH,
                      &on_trans_light_off_light_on);
+  fsm.init();
 }
 
 void loop()
 {
-  // No "fsm.run_machine()" call needed as no "on_state" funcions or timmed transitions exists
+  // No "fsm.process()" call needed as no "on_state" funcions or timmed
+  // transitions exists
   delay(2000);
   fsm.trigger(FLIP_LIGHT_SWITCH);
   delay(2000);
