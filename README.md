@@ -16,6 +16,10 @@ useful to you:
 If you'd like to contribute to `arduino-fsm` please submit a pull-request on a
 feature branch.
 
+# Donate
+
+* Bitcoin: 1HnqohdK1d6gwDc7bT6LPPkmUFAXczEJKp
+
 # Changelog
 
 **2.1.0 - 21/11/2015**
