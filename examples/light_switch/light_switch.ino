@@ -3,7 +3,7 @@
 // State machine variables
 #define FLIP_LIGHT_SWITCH 1
 
-State state_light_on(on_light_on_enter, &on_light_on_exit);
+State state_light_on(on_light_on_enter, &on_light_on_exit) // break code to test if CI detect this
 State state_light_off(on_light_off_enter, &on_light_off_exit);
 Fsm fsm(&state_light_off);
 
