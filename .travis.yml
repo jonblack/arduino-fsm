@@ -1,0 +1,23 @@
+language: python
+python:
+    - "2.7"
+
+# Cache PlatformIO packages using Travis CI container-based infrastructure
+sudo: false
+cache:
+    directories:
+        - "~/.platformio"
+
+env:
+    - PLATFORMIO_CI_SRC=examples/light_switch
+    - PLATFORMIO_CI_SRC=examples/multitasking
+
+install:
+    - pip install -U platformio
+
+    # Libraries from PlatformIO Library Registry:
+    #- platformio lib -g install ...
+
+script:
+    #- platformio ci --board=uno --board=teensy31 --board=due --lib="."
+    - platformio ci --board=uno --lib="."
