@@ -1,2 +1,2 @@
-Fsm     KEYWORD1
-State   KEYWORD1
+Fsm	KEYWORD1
+State	KEYWORD1
