@@ -22,7 +22,7 @@ feature branch.
 
 # Changelog
 
-**2.2.0 - 12/03/2016**
+**2.2.0 - 25/10/2017**
 
 * Add `on_state()` handler to states
 * New `run_machine()` method to invoke machine execution (includes a `check_timed_transitions()` call)
