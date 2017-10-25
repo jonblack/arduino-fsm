@@ -1,10 +1,10 @@
-#include <Fsm.h>
+#include "Fsm.h"
 
 // State machine variables
 #define FLIP_LIGHT_SWITCH 1
 
-State state_light_on(on_light_on_enter, &on_light_on_exit);
-State state_light_off(on_light_off_enter, &on_light_off_exit);
+State state_light_on(on_light_on_enter, NULL, &on_light_on_exit);
+State state_light_off(on_light_off_enter, NULL, &on_light_off_exit);
 Fsm fsm(&state_light_off);
 
 // Transition callback functions
@@ -53,6 +53,7 @@ void setup()
 
 void loop()
 {
+  // No "fsm.run_machine()" call needed as no "on_state" funcions or timmed transitions exists
   delay(2000);
   fsm.trigger(FLIP_LIGHT_SWITCH);
   delay(2000);
