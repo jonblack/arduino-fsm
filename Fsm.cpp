@@ -91,7 +91,11 @@ Fsm::Transition Fsm::create_transition(State* state_from, State* state_to,
   return t;
 }
 
-void Fsm::trigger(int event)
+/* param immidiate = true will make state change while calling this function
+   param immediate=false will schedule state chage for next run_machine call
+   default is immidiate=true for backwards compability
+*/ 
+void Fsm::trigger(int event, bool immidiate)
 {
   if (m_initialized)
   {
@@ -101,7 +105,12 @@ void Fsm::trigger(int event)
       if (m_transitions[i].state_from == m_current_state &&
           m_transitions[i].event == event)
       {
-        Fsm::make_transition(&(m_transitions[i]));
+	if(immidiate){
+	  Fsm::make_transition(&(m_transitions[i]));
+	}else{
+	  // queue state cha
+	  Fsm::m_synchronous_transition = &(m_transitions[i]);
+	}
         return;
       }
     }
@@ -143,7 +152,12 @@ void Fsm::run_machine()
   
   if (m_current_state->on_state != NULL)
     m_current_state->on_state();
-    
+
+  if(Fsm::m_synchronous_transition != NULL){
+    Fsm::make_transition(m_synchronous_transition);
+    m_synchronous_transition = NULL;
+  }
+      
   Fsm::check_timed_transitions();
 }
 
