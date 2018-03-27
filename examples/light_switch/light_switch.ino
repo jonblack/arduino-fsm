@@ -3,6 +3,9 @@
 // State machine variables
 #define FLIP_LIGHT_SWITCH 1
 
+// set to true for ESP8266, false for Arduino/Genuino
+#define LED_BUILTIN_PULLUP   true
+
 State state_light_on(on_light_on_enter, NULL, &on_light_on_exit);
 State state_light_off(on_light_off_enter, NULL, &on_light_off_exit);
 Fsm fsm(&state_light_off);
@@ -11,6 +14,8 @@ Fsm fsm(&state_light_off);
 void on_light_on_enter()
 {
   Serial.println("Entering LIGHT_ON");
+  digitalWrite(LED_BUILTIN, LED_BUILTIN_PULLUP ? LOW : HIGH);
+
 }
 
 void on_light_on_exit()
@@ -21,6 +26,7 @@ void on_light_on_exit()
 void on_light_off_enter()
 {
   Serial.println("Entering LIGHT_OFF");
+  digitalWrite(LED_BUILTIN, LED_BUILTIN_PULLUP ? HIGH : LOW);
 }
 
 void on_light_off_exit()
@@ -42,6 +48,7 @@ void on_trans_light_off_light_on()
 void setup()
 {
   Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   fsm.add_transition(&state_light_on, &state_light_off,
                      FLIP_LIGHT_SWITCH,
