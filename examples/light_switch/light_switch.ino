@@ -53,7 +53,7 @@ void setup()
 
 void loop()
 {
-  // No "fsm.run_machine()" call needed as no "on_state" funcions or timmed transitions exists
+  fsm.run_machine();
   delay(2000);
   fsm.trigger(FLIP_LIGHT_SWITCH);
 }
