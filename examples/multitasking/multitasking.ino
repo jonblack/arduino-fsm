@@ -27,11 +27,11 @@ void on_led2_off_enter() {
     digitalWrite(LED2_PIN, LOW);
 }
 
-State state_led1_on(&on_led1_on_enter, NULL, NULL);
-State state_led1_off(&on_led1_off_enter, NULL, NULL);
+State state_led1_on(&on_led1_on_enter);
+State state_led1_off(&on_led1_off_enter);
 
-State state_led2_on(&on_led2_on_enter, NULL, NULL);
-State state_led2_off(&on_led2_off_enter, NULL, NULL);
+State state_led2_on(&on_led2_on_enter);
+State state_led2_off(&on_led2_off_enter);
 
 Fsm fsm_led1(&state_led1_off);
 Fsm fsm_led2(&state_led2_off);
@@ -42,10 +42,10 @@ void setup() {
     pinMode(LED1_PIN, OUTPUT);
     pinMode(LED2_PIN, OUTPUT);
 
-    fsm_led1.add_timed_transition(&state_led1_off, &state_led1_on, 1000, NULL);
-    fsm_led1.add_timed_transition(&state_led1_on, &state_led1_off, 3000, NULL);
-    fsm_led2.add_timed_transition(&state_led2_off, &state_led2_on, 1000, NULL);
-    fsm_led2.add_timed_transition(&state_led2_on, &state_led2_off, 2000, NULL);
+    fsm_led1.add_timed_transition(&state_led1_off, &state_led1_on, 1000);
+    fsm_led1.add_timed_transition(&state_led1_on, &state_led1_off, 3000);
+    fsm_led2.add_timed_transition(&state_led2_off, &state_led2_on, 1000);
+    fsm_led2.add_timed_transition(&state_led2_on, &state_led2_off, 2000);
 }
 
 
@@ -54,4 +54,3 @@ void loop() {
     fsm_led2.run_machine();
     delay(200);
 }
-
