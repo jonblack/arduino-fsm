@@ -9,8 +9,9 @@
  */
 
 // Used pins
-#define LED_PIN     13
-#define BUTTON_PIN  8
+#define LED_PIN             15
+#define LED_PULLUP          false
+#define BUTTON_PIN          16
 
 //Events
 #define BUTTON_EVENT  0
@@ -22,21 +23,21 @@ int buttonState = 0;
  * transition from s1 to s2 on button press
  * transition back from s2 to s1 after 3 seconds or button press
  */
-State state_led_off(&led_off, &check_button, NULL);
-State state_led_on(&led_on, &check_button, NULL);
+State state_led_off(&led_off, &check_button);
+State state_led_on(&led_on, &check_button);
 Fsm fsm(&state_led_off);
 
 // Transition functions
 void led_off()
 {
   Serial.println("led_off");
-  digitalWrite(LED_PIN, LOW);
+  digitalWrite(LED_PIN, LED_PULLUP ? true : false);
 }
 
 void led_on()
 {
   Serial.println("led_on");
-  digitalWrite(LED_PIN, HIGH);
+  digitalWrite(LED_PIN, LED_PULLUP ? false : true);
 }
 
 void check_button()
