@@ -100,17 +100,17 @@ void Fsm::check_timed_transitions() {
 }
 
 void Fsm::run_machine() {
-      // first run must exec first state "on_enter"
-      if (!m_initialized) {
+    // first run must exec first state "on_enter"
+    if (!m_initialized) {
         m_initialized = true;
         if (m_current_state->on_enter != NULL) {
             m_current_state->on_enter();
         }
     }
-
     if (m_current_state->on_state != NULL) {
         m_current_state->on_state();
     }
+
     Fsm::check_timed_transitions();
 }
 
