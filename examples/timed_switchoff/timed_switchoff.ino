@@ -25,47 +25,42 @@ int buttonState = 0;
  */
 State state_led_off(&led_off, &check_button);
 State state_led_on(&led_on, &check_button);
+
 Fsm fsm(&state_led_off);
 
 // Transition functions
-void led_off()
-{
-  Serial.println("led_off");
-  digitalWrite(LED_PIN, LED_PULLUP ? true : false);
+void led_off() {
+    Serial.println("led_off");
+    digitalWrite(LED_PIN, LED_PULLUP ? true : false);
 }
 
-void led_on()
-{
-  Serial.println("led_on");
-  digitalWrite(LED_PIN, LED_PULLUP ? false : true);
+void led_on() {
+    Serial.println("led_on");
+    digitalWrite(LED_PIN, LED_PULLUP ? false : true);
 }
 
-void check_button()
-{
-  int buttonState = digitalRead(BUTTON_PIN);
-  if (buttonState == LOW) {
-    Serial.println("button_pressed");
-    fsm.trigger(BUTTON_EVENT);
-  }
+void check_button() {
+    int buttonState = digitalRead(BUTTON_PIN);
+    if (buttonState == LOW) {
+        Serial.println("button_pressed");
+        fsm.trigger(BUTTON_EVENT);
+    }
 }
 
 // standard arduino functions
-void setup()
-{
-  Serial.begin(9600);
+void setup() {
+    Serial.begin(9600);
   
-  pinMode(LED_PIN, OUTPUT);
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
+    pinMode(LED_PIN, OUTPUT);
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
 
-  fsm.add_transition(&state_led_off, &state_led_on,
-                     BUTTON_EVENT);
-  fsm.add_timed_transition(&state_led_on, &state_led_off, 3000);
-  fsm.add_transition(&state_led_on, &state_led_off, BUTTON_EVENT);
-  Serial.println("Setup END");
+    fsm.add_transition          (&state_led_off, &state_led_on, BUTTON_EVENT);
+    fsm.add_transition          (&state_led_on, &state_led_off, BUTTON_EVENT);
+    fsm.add_timed_transition    (&state_led_on, &state_led_off, 3000);
+    Serial.println("Setup END");
 }
 
-void loop()
-{
+void loop() {
   // Call fsm run
   fsm.run_machine();
   delay(100);
