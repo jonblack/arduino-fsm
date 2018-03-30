@@ -50,7 +50,11 @@ void check_button() {
 // standard arduino functions
 void setup() {
     Serial.begin(9600);
-  
+    while (!Serial) {
+        delay(50);
+    }
+    Serial.println("\RUNNING: timed switchoff");
+
     pinMode(LED_PIN, OUTPUT);
     pinMode(BUTTON_PIN, INPUT_PULLUP);
 

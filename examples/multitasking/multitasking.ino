@@ -38,6 +38,10 @@ Fsm fsm_led2(&state_led2_off);
 
 void setup() {
     Serial.begin(9600);
+    while (!Serial) {
+        delay(50);
+    }
+    Serial.println("\RUNNING: multitasking");
 
     pinMode(LED1_PIN, OUTPUT);
     pinMode(LED2_PIN, OUTPUT);
@@ -46,6 +50,7 @@ void setup() {
     fsm_led1.add_timed_transition(&state_led1_on,   &state_led1_off,    3000);
     fsm_led2.add_timed_transition(&state_led2_off,  &state_led2_on,     1000);
     fsm_led2.add_timed_transition(&state_led2_on,   &state_led2_off,    2000);
+    Serial.println("Setup END");
 }
 
 

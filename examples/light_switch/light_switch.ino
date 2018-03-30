@@ -40,10 +40,16 @@ void on_trans_light_off_light_on() {
 // standard arduino functions
 void setup() {
     Serial.begin(9600);
+    while (!Serial) {
+        delay(50);
+    }
+    Serial.println("\RUNNING: light_switch");
+
     pinMode(LED_BUILTIN, OUTPUT);
 
     fsm.add_transition(&state_light_on, &state_light_off, FLIP_LIGHT_SWITCH, &on_trans_light_on_light_off);
     fsm.add_transition(&state_light_off, &state_light_on, FLIP_LIGHT_SWITCH, &on_trans_light_off_light_on);
+    Serial.println("Setup END");
 }
 
 void loop() {
