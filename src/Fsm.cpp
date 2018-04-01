@@ -15,7 +15,8 @@
 
 #include "Fsm.h"
 
-State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)()) :
+State::State(String name, CallbackFunction on_enter, CallbackFunction on_state, CallbackFunction on_exit) :
+    name(name),
     on_enter(on_enter),
     on_state(on_state),
     on_exit(on_exit) {
@@ -26,7 +27,9 @@ Fsm::Fsm(State* initial_state) :
     m_transitions(NULL),
     m_num_transitions(0),
     m_num_timed_transitions(0),
-    m_initialized(false) {
+    m_dot_definition(create_dot_inital_state(initial_state->name)),
+    m_initialized(false),
+    m_on_transition(NULL) {
 }
 
 Fsm::~Fsm() {
@@ -36,7 +39,11 @@ Fsm::~Fsm() {
     m_timed_transitions = NULL;
 }
 
-void Fsm::add_transition(State* state_from, State* state_to, int event, void (*on_transition)()) {
+void Fsm::on_transition(CallbackFunction f) {
+    m_on_transition = f;
+}
+
+void Fsm::add_transition(State* state_from, State* state_to, int event, CallbackFunction on_transition, String name) {
     if (state_from == NULL || state_to == NULL) {
         return;
     }
@@ -44,9 +51,13 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, void (*o
     m_transitions = (Transition*) realloc(m_transitions, (m_num_transitions + 1) * sizeof(Transition));
     m_transitions[m_num_transitions] = transition;
     m_num_transitions++;
+
+    m_dot_definition =
+        m_dot_definition +
+        create_dot_transition(state_from->name, state_to->name, name);
 }
 
-void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, void (*on_transition)()) {
+void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, CallbackFunction on_transition, String name) {
     if (state_from == NULL || state_to == NULL) {
         return;
     }
@@ -59,9 +70,13 @@ void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long
     m_timed_transitions = (TimedTransition*) realloc(m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
     m_timed_transitions[m_num_timed_transitions] = timed_transition;
     m_num_timed_transitions++;
+
+    m_dot_definition =
+        m_dot_definition +
+        create_dot_transition(state_from->name, state_to->name, name + " (" + String(interval) + ")");
 }
 
-Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int event, void (*on_transition)()) {
+Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int event, CallbackFunction on_transition) {
     Transition t;
     t.state_from = state_from;
     t.state_to = state_to;
@@ -99,6 +114,10 @@ void Fsm::check_timed_transitions() {
     }
 }
 
+State* Fsm::get_current_state() {
+    return m_current_state;
+}
+
 void Fsm::run_machine() {
     // first run must exec first state "on_enter"
     if (!m_initialized) {
@@ -125,7 +144,6 @@ void Fsm::make_transition(Transition* transition) {
     if (transition->state_to->on_enter != NULL) {
         transition->state_to->on_enter();
     }
-
     m_current_state = transition->state_to;
 
     // Initialice all timed transitions from m_current_state
@@ -136,4 +154,36 @@ void Fsm::make_transition(Transition* transition) {
             ttransition->start = now;
         }
     }
+    if (m_on_transition != NULL) {
+        m_on_transition();
+    }
+}
+
+String Fsm::get_dot_definition() {
+    return
+        "digraph G {\n" +
+        create_dot_header() +
+        m_dot_definition +
+        create_dot_active_node() +
+        "}\n";
+}
+
+String Fsm::create_dot_transition(String from, String to, String label /* = "" */) {
+    return "\t\"" +
+        from + "\" -> \"" + to + "\"" +
+        ((label != "") ? String(" [label=\"" + label + "\"]") : "") +
+        ";\n";
+}
+
+String Fsm::create_dot_inital_state(String name) {
+    return "\t\"" + name + "\" [shape=doublecircle];\n\n";
+}
+
+
+String Fsm::create_dot_active_node() {
+    return "\t\"" + m_current_state->name + "\" [style=filled fillcolor=black fontcolor=white];\n";
+}
+
+String Fsm::create_dot_header() {
+    return "\trankdir=LR;\n\tnode [shape=circle];\n";
 }
