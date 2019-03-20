@@ -26,8 +26,9 @@ State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)())
 
 Fsm::Fsm(State* initial_state)
 : m_current_state(initial_state),
-  m_transitions(NULL),
+  m_transitions(nullptr),
   m_num_transitions(0),
+  m_timed_transitions(nullptr),
   m_num_timed_transitions(0),
   m_initialized(false)
 {
