@@ -49,6 +49,7 @@ public:
 
   void trigger(int event);
   void run_machine();
+  State* getCurrentState();
 
 private:
   struct Transition
