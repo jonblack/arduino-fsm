@@ -15,10 +15,11 @@
 
 #include "Fsm.h"
 
-State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)())
+State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)(), const char *name)
     : on_enter(on_enter),
       on_state(on_state),
-      on_exit(on_exit)
+      on_exit(on_exit),
+      name(name)
 {
 }
 
@@ -39,26 +40,26 @@ Fsm::~Fsm()
 }
 
 void Fsm::add_transition(State *state_from, State *state_to, int event,
-                         void (*on_transition)())
+                         void (*on_transition)(), const char *name)
 {
   if (state_from == NULL || state_to == NULL)
     return;
 
   Transition transition = Fsm::create_transition(state_from, state_to, event,
-                                                 on_transition);
+                                                 on_transition, name);
   m_transitions = (Transition *)realloc(m_transitions, (m_num_transitions + 1) * sizeof(Transition));
   m_transitions[m_num_transitions] = transition;
   m_num_transitions++;
 }
 
 TimedTransition *Fsm::add_timed_transition(State *state_from, State *state_to,
-                                           unsigned long interval, void (*on_transition)())
+                                           unsigned long interval, void (*on_transition)(), const char *name)
 {
   if (state_from == NULL || state_to == NULL)
     return NULL;
 
   Transition transition = Fsm::create_transition(state_from, state_to, 0,
-                                                 on_transition);
+                                                 on_transition, name);
 
   TimedTransition timed_transition;
   timed_transition.transition = transition;
@@ -73,19 +74,21 @@ TimedTransition *Fsm::add_timed_transition(State *state_from, State *state_to,
 }
 
 Transition Fsm::create_transition(State *state_from, State *state_to,
-                                       int event, void (*on_transition)())
+                                       int event, void (*on_transition)(), const char *name)
 {
   Transition t;
   t.state_from = state_from;
   t.state_to = state_to;
   t.event = event;
   t.on_transition = on_transition;
+  t.name = name;
 
   return t;
 }
 
 void Fsm::trigger(int event)
 {
+  Serial.printf("Trigger powerFSM %d\n", event);
   if (m_initialized)
   {
     // Find the transition with the current state and given event.
@@ -143,6 +146,8 @@ void Fsm::run_machine()
 
 void Fsm::make_transition(Transition *transition)
 {
+  Serial.printf("Transition powerFSM transition=%s, from=%s to=%s\n", 
+    transition->name, transition->state_from->name, transition->state_to->name);
 
   // Execute the handlers in the correct order.
   if (transition->state_from->on_exit != NULL)

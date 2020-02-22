@@ -24,10 +24,11 @@
 
 struct State
 {
-  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
+  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)(), const char *name);
   void (*on_enter)();
   void (*on_state)();
   void (*on_exit)();
+  const char *name;
 };
 
 struct Transition
@@ -36,6 +37,7 @@ struct Transition
   State *state_to;
   int event;
   void (*on_transition)();
+  const char *name;
 };
 
 struct TimedTransition
@@ -54,10 +56,10 @@ public:
   ~Fsm();
 
   void add_transition(State *state_from, State *state_to, int event,
-                      void (*on_transition)());
+                      void (*on_transition)(), const char *name);
 
   TimedTransition *add_timed_transition(State *state_from, State *state_to,
-                            unsigned long interval, void (*on_transition)());
+                            unsigned long interval, void (*on_transition)(), const char *name);
 
   void check_timed_transitions();
 
@@ -66,7 +68,7 @@ public:
 
 private:
   static Transition create_transition(State *state_from, State *state_to,
-                                      int event, void (*on_transition)());
+                                      int event, void (*on_transition)(), const char *name);
 
   void make_transition(Transition *transition);
 
