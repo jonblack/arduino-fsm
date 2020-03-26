@@ -107,7 +107,7 @@ void Fsm::trigger(int event)
   }
 }
 
-State* get_current_state() {
+State* Fsm::get_current_state() {
   return m_current_state;
 }
 
