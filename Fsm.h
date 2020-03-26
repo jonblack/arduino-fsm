@@ -65,6 +65,12 @@ public:
   
   void run_machine();
 
+  /**
+   * returns current state (helpful if the same handler is used to drive many similar states)
+   * @return current state
+   */
+  State* get_current_state();
+
 private:
   struct Transition
   {

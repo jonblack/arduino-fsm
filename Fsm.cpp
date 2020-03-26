@@ -107,6 +107,10 @@ void Fsm::trigger(int event)
   }
 }
 
+State* get_current_state() {
+  return m_current_state;
+}
+
 void Fsm::check_timed_transitions()
 {
   for (int i = 0; i < m_num_timed_transitions; ++i)
