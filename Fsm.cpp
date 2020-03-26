@@ -130,12 +130,7 @@ void Fsm::check_timed_transitions()
   }
 }
 
-/**
-* looks for the current state's timed transitions to the target state and reset the timer
-*
-* @param state_to target state to reset the timed transition for. If NULL reset all current state timers
-*/
-void Fsm:void reset_timed_transition(State* state_to) 
+void Fsm::reset_timed_transition(State* state_to) 
 {
   for (int i = 0; i < m_num_timed_transitions; ++i)
     {

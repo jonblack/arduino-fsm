@@ -47,12 +47,12 @@ public:
 
   void check_timed_transitions();
 
-/**
- * looks for the current state's timed transitions to the target state and reset the timer
- *
- * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
- */
-void reset_timed_transition(State* state_to);
+  /**
+   * looks for the current state's timed transitions to the target state and reset the timer
+   *
+   * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
+   */
+  void reset_timed_transition(State* state_to);
 
   void trigger(int event);
   
