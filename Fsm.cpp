@@ -138,8 +138,7 @@ void Fsm::reset_timed_transition(State* state_to)
       if (transition->transition.state_from == m_current_state)
       {
         if(state_to == NULL || (state_to != NULL && state_to == transition->transition.state_to) ) {
-          unsigned long now = millis();
-          transition->start = now; 
+          transition->start = millis(); 
         }
       }
     } 
