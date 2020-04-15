@@ -14,6 +14,7 @@
 // along with arduino-fsm.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Fsm.h"
+#include <assert.h>
 
 State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)(), const char *name)
     : on_enter(on_enter),
