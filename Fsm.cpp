@@ -90,7 +90,7 @@ int Fsm::add_timed_transition(State* state_from, State* state_to,
   return (m_num_timed_transitions - 1);
 }
 
-void Fsm::edit_timed_transition(unsigned long interval, int index)
+void Fsm::edit_timed_transition_interval(unsigned long interval, int index)
 {
   // Change the interval of the transition at the given index
   m_timed_transitions[index].interval = interval;
