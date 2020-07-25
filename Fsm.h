@@ -48,8 +48,7 @@ public:
   int add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
-  void edit_timed_transition_interval(unsigned long interval, int index);
-
+  void edit_timed_transition_interval(int index, unsigned long interval);
 
   void check_timed_transitions();
 
