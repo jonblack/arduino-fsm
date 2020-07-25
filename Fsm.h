@@ -23,6 +23,9 @@
   #include <WProgram.h>
 #endif
 
+// error codes
+#define ERR_BAD_STATE -10
+
 
 struct State
 {
@@ -39,10 +42,10 @@ public:
   Fsm(State* initial_state);
   ~Fsm();
 
-  void add_transition(State* state_from, State* state_to, int event,
+  int add_transition(State* state_from, State* state_to, int event,
                       void (*on_transition)());
 
-  void add_timed_transition(State* state_from, State* state_to,
+  int add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
   void Fsm::edit_timed_transition(unsigned long interval, int index)
