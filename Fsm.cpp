@@ -78,6 +78,12 @@ void Fsm::add_timed_transition(State* state_from, State* state_to,
   m_num_timed_transitions++;
 }
 
+void Fsm::edit_timed_transition(unsigned long interval, int index)
+{
+  // Change the interval of the transition at the given index
+  m_timed_transitions[index].interval = interval;
+
+}
 
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to,
                                        int event, void (*on_transition)())

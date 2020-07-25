@@ -45,6 +45,9 @@ public:
   void add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
+  void Fsm::edit_timed_transition(unsigned long interval, int index)
+
+
   void check_timed_transitions();
 
   void trigger(int event);
