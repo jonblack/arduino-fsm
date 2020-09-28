@@ -26,7 +26,7 @@
 
 struct State
 {
-  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
+  State(void (*on_enter)(), void (*on_state)() = nullptr, void (*on_exit)() = nullptr);
   void (*on_enter)();
   void (*on_state)();
   void (*on_exit)();
@@ -40,10 +40,10 @@ public:
   ~Fsm();
 
   void add_transition(State* state_from, State* state_to, int event,
-                      void (*on_transition)());
+                      void (*on_transition)() = nullptr);
 
   void add_timed_transition(State* state_from, State* state_to,
-                            unsigned long interval, void (*on_transition)());
+                            unsigned long interval, void (*on_transition)() = nullptr);
 
   void check_timed_transitions();
 
