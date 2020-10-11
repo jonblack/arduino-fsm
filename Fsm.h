@@ -61,6 +61,8 @@ public:
   TimedTransition *add_timed_transition(State *state_from, State *state_to,
                             unsigned long interval, void (*on_transition)(), const char *name);
 
+  State *getState() const { return m_current_state; }
+
   void check_timed_transitions();
 
   void trigger(int event);
