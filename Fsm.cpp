@@ -43,26 +43,36 @@ Fsm::~Fsm()
 }
 
 
-void Fsm::add_transition(State* state_from, State* state_to, int event,
+int Fsm::add_transition(State* state_from, State* state_to, int event,
                          void (*on_transition)())
 {
+  // returns positive int index of added transition or negative int error code
+
   if (state_from == NULL || state_to == NULL)
-    return;
+    return ERR_BAD_STATE;
 
   Transition transition = Fsm::create_transition(state_from, state_to, event,
                                                on_transition);
   m_transitions = (Transition*) realloc(m_transitions, (m_num_transitions + 1)
                                                        * sizeof(Transition));
-  m_transitions[m_num_transitions] = transition;
+
+  int transition_index = m_num_transitions; // store new transition at end
+  m_transitions[transition_index] = transition;
   m_num_transitions++;
+
+  // return index in list of transitions of the added transition
+  // this is for consistency with add_timed_transition()
+  return transition_index;
 }
 
 
-void Fsm::add_timed_transition(State* state_from, State* state_to,
+int Fsm::add_timed_transition(State* state_from, State* state_to,
                                unsigned long interval, void (*on_transition)())
 {
+  // returns positive int index of added transition or negative int error code
+
   if (state_from == NULL || state_to == NULL)
-    return;
+    return ERR_BAD_STATE;
 
   Transition transition = Fsm::create_transition(state_from, state_to, 0,
                                                  on_transition);
@@ -74,10 +84,22 @@ void Fsm::add_timed_transition(State* state_from, State* state_to,
 
   m_timed_transitions = (TimedTransition*) realloc(
       m_timed_transitions, (m_num_timed_transitions + 1) * sizeof(TimedTransition));
-  m_timed_transitions[m_num_timed_transitions] = timed_transition;
+
+  int transition_index = m_num_timed_transitions; // store new transition at end
+  m_timed_transitions[transition_index] = timed_transition;
   m_num_timed_transitions++;
+
+  // return index in list of timed transitions of the added transition
+  // this index can be passed to edit_timed_transition() to edit the transition
+  return transition_index;
 }
 
+void Fsm::edit_timed_transition_interval(int index, unsigned long interval)
+{
+  // change the interval of the transition at the given index
+  m_timed_transitions[index].interval = interval;
+
+}
 
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to,
                                        int event, void (*on_transition)())
@@ -140,16 +162,16 @@ void Fsm::run_machine()
     if (m_current_state->on_enter != NULL)
       m_current_state->on_enter();
   }
-  
+
   if (m_current_state->on_state != NULL)
     m_current_state->on_state();
-    
+
   Fsm::check_timed_transitions();
 }
 
 void Fsm::make_transition(Transition* transition)
 {
- 
+
   // Execute the handlers in the correct order.
   if (transition->state_from->on_exit != NULL)
     transition->state_from->on_exit();
@@ -159,7 +181,7 @@ void Fsm::make_transition(Transition* transition)
 
   if (transition->state_to->on_enter != NULL)
     transition->state_to->on_enter();
-  
+
   m_current_state = transition->state_to;
 
   //Initialice all timed transitions from m_current_state
