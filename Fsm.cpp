@@ -89,7 +89,7 @@ Transition Fsm::create_transition(State *state_from, State *state_to,
 
 void Fsm::trigger(int event)
 {
-  Serial.printf("Trigger powerFSM %d\n", event);
+  // Serial.printf("Trigger powerFSM %d\n", event);
   if (m_initialized)
   {
     // Find the transition with the current state and given event.
