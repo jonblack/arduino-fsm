@@ -36,7 +36,6 @@ Fsm::Fsm(State *initial_state)
 Fsm::~Fsm()
 {
   free(m_transitions);
-  free(m_timed_transitions);
   m_transitions = NULL;
 }
 
