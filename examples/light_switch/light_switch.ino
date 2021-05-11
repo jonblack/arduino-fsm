@@ -3,6 +3,11 @@
 // State machine variables
 #define FLIP_LIGHT_SWITCH 1
 
+void on_light_on_enter();
+void on_light_on_exit();
+void on_light_off_enter();
+void on_light_off_exit();
+
 State state_light_on(on_light_on_enter, NULL, &on_light_on_exit);
 State state_light_off(on_light_off_enter, NULL, &on_light_off_exit);
 Fsm fsm(&state_light_off);
@@ -49,6 +54,7 @@ void setup()
   fsm.add_transition(&state_light_off, &state_light_on,
                      FLIP_LIGHT_SWITCH,
                      &on_trans_light_off_light_on);
+  fsm.run_machine();
 }
 
 void loop()
