@@ -26,10 +26,11 @@
 
 struct State
 {
-  State(void (*on_enter)(), void (*on_state)() = nullptr, void (*on_exit)() = nullptr);
-  void (*on_enter)();
-  void (*on_state)();
-  void (*on_exit)();
+  State();
+  State(void (*on_enter)(void * ctx), void (*on_state)(void * ctx) = nullptr, void (*on_exit)(void * ctx) = nullptr);
+  void (*on_enter)(void * ctx);
+  void (*on_state)(void * ctx);
+  void (*on_exit)(void * ctx);
 };
 
 
@@ -40,30 +41,37 @@ public:
   ~Fsm();
 
   void add_transition(State* state_from, State* state_to, int event,
-                      void (*on_transition)() = nullptr);
+                      void (*on_transition)(void* ctx) = nullptr);
 
   void add_timed_transition(State* state_from, State* state_to,
-                            unsigned long interval, void (*on_transition)() = nullptr);
+                            unsigned long interval, void (*on_transition)(void* ctx) = nullptr);
 
   /**
-   * checks the timed transitions for the current state and if timeout occured
+   * checks the timed transitions for the current state and if timeout occurred
    * trigger appropriate transition. Timed transitions are checked and triggered in the same order as added
+   * @param ctx pointer to context to be passed onto state functions. Default is nullptr to retain backwards compatability.
    */
-  void check_timed_transitions();
+  void check_timed_transitions(void* ctx = nullptr);
 
   /**
    * looks for the current state's timed transitions to the target state and reset the timer 
-   * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
+   * @param state_to target state to reset the timed transition for. If nullptr reset all current state timers
+   * @param ctx pointer to context to be passed onto state functions. Default is nullptr to retain backwards compatability.
    */
   void reset_timed_transition(State* state_to);
 
   /**
    * trigger transition with the event 
    * @param event enum that defines the trigger
+   * @param ctx pointer to context to be passed onto state functions. Default is nullptr to retain backwards compatability.
    */
-  void trigger(int event);
+  void trigger(int event, void* ctx = nullptr);
   
-  void run_machine();
+  /**
+   * iterate one run-cycle of the state machine
+   * @param ctx pointer to context to be passed onto state functions. Default is nullptr to retain backwards compatability.
+   */
+  void run_machine(void* ctx = nullptr);
 
   /**
    * returns current state (helpful if the same handler is used to drive many similar states)
@@ -77,7 +85,7 @@ private:
     State* state_from;
     State* state_to;
     int event;
-    void (*on_transition)(void * ctx);
+    void (*on_transition)(void* ctx = nullptr);
 
   };
   struct TimedTransition
@@ -88,9 +96,9 @@ private:
   };
 
   static Transition create_transition(State* state_from, State* state_to,
-                                      int event, void (*on_transition)(void * ctx));
+                                      int event, void (*on_transition)(void* ctx));
 
-  void make_transition(Transition* transition,void * ctx);
+  void make_transition(Transition* transition, void* ctx = nullptr);
 
 private:
   State* m_current_state;

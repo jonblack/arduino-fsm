@@ -15,6 +15,13 @@
 
 #include "Fsm.h"
 
+State::State()
+{
+  on_enter = nullptr;
+  on_state = nullptr;
+  on_enter = nullptr;
+}
+
 
 State::State(void (*on_enter)(void * ctx), void (*on_state)(void * ctx), void (*on_exit)(void * ctx))
 : on_enter(on_enter),
@@ -45,7 +52,7 @@ Fsm::~Fsm()
 
 
 void Fsm::add_transition(State* state_from, State* state_to, int event,
-                         void (*on_transition)(void * ctx))
+                         void (*on_transition)(void* ctx))
 {
   if (state_from == NULL || state_to == NULL)
     return;
@@ -91,7 +98,7 @@ Fsm::Transition Fsm::create_transition(State* state_from, State* state_to,
   return t;
 }
 
-void Fsm::trigger(int event,void * ctx)
+void Fsm::trigger(int event, void* ctx)
 {
   if (m_initialized)
   {
@@ -112,7 +119,7 @@ State* Fsm::get_current_state() {
   return m_current_state;
 }
 
-void Fsm::check_timed_transitions()
+void Fsm::check_timed_transitions(void* ctx)
 {
   for (int i = 0; i < m_num_timed_transitions; ++i)
   {
@@ -150,7 +157,7 @@ void Fsm::reset_timed_transition(State* state_to)
 }
 
 
-void Fsm::run_machine()
+void Fsm::run_machine(void* ctx)
 {
   // first run must exec first state "on_enter"
   if (!m_initialized)
@@ -166,9 +173,8 @@ void Fsm::run_machine()
   Fsm::check_timed_transitions(ctx);
 }
 
-void Fsm::make_transition(Transition* transition, void * ctx)
+void Fsm::make_transition(Transition* transition, void* ctx)
 {
- 
   // Execute the handlers in the correct order.
   if (transition->state_from->on_exit != NULL)
     transition->state_from->on_exit(ctx);
@@ -189,5 +195,4 @@ void Fsm::make_transition(Transition* transition, void * ctx)
     if (ttransition->transition.state_from == m_current_state)
       ttransition->start = now;
   }
-
 }
