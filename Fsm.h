@@ -47,7 +47,7 @@ public:
 
   void check_timed_transitions();
 
-  void trigger(int event, bool immidiate=true);
+  void trigger(int event, bool immediate=true);
   void run_machine();
 
 private:
@@ -73,7 +73,7 @@ private:
 
 private:
   State* m_current_state;
-  Transition* m_synchronous_transition;
+  Transition* m_asynchronous_transition;
   Transition* m_transitions;
   int m_num_transitions;
 
