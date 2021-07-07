@@ -45,10 +45,31 @@ public:
   void add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)() = nullptr);
 
-  void check_timed_transitions(void * ctx);
+  /**
+   * checks the timed transitions for the current state and if timeout occured
+   * trigger appropriate transition. Timed transitions are checked and triggered in the same order as added
+   */
+  void check_timed_transitions();
 
-  void trigger(int event, void * ctx);
-  void run_machine(void * ctx);
+  /**
+   * looks for the current state's timed transitions to the target state and reset the timer 
+   * @param state_to target state to reset the timed transition for. If NULL reset all current state timers
+   */
+  void reset_timed_transition(State* state_to);
+
+  /**
+   * trigger transition with the event 
+   * @param event enum that defines the trigger
+   */
+  void trigger(int event);
+  
+  void run_machine();
+
+  /**
+   * returns current state (helpful if the same handler is used to drive many similar states)
+   * @return current state
+   */
+  State* get_current_state();
 
 private:
   struct Transition

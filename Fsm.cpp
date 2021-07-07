@@ -79,7 +79,6 @@ void Fsm::add_timed_transition(State* state_from, State* state_to,
   m_num_timed_transitions++;
 }
 
-
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to,
                                        int event, void (*on_transition)(void * ctx))
 {
@@ -109,7 +108,11 @@ void Fsm::trigger(int event,void * ctx)
   }
 }
 
-void Fsm::check_timed_transitions(void * ctx)
+State* Fsm::get_current_state() {
+  return m_current_state;
+}
+
+void Fsm::check_timed_transitions()
 {
   for (int i = 0; i < m_num_timed_transitions; ++i)
   {
@@ -132,7 +135,22 @@ void Fsm::check_timed_transitions(void * ctx)
   }
 }
 
-void Fsm::run_machine(void * ctx)
+void Fsm::reset_timed_transition(State* state_to) 
+{
+  for (int i = 0; i < m_num_timed_transitions; ++i)
+    {
+      TimedTransition* transition = &m_timed_transitions[i];
+      if (transition->transition.state_from == m_current_state)
+      {
+        if(state_to == NULL || (state_to != NULL && state_to == transition->transition.state_to) ) {
+          transition->start = millis(); 
+        }
+      }
+    } 
+}
+
+
+void Fsm::run_machine()
 {
   // first run must exec first state "on_enter"
   if (!m_initialized)
