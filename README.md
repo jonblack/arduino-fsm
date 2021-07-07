@@ -5,11 +5,11 @@ An arduino library for implementing a finite state machine.
 Other than the examples included in the library, the following pages might be
 useful to you:
 
-* [Humble Coder: Arduino finite state machine library][1]
-* [Humble Coder: Arduino multitasking using a finite state machine][2]
+* [Arduino finite state machine library][1]
+* [Arduino multitasking using a finite state machine][2]
 
-[1]: http://www.humblecoder.com/arduino-finite-state-machine-library/
-[2]: http://www.humblecoder.com/arduino-multitasking-using-finite-state-machines/
+[1]: https://jonblack.me/arduino-finite-state-machine-library/
+[2]: https://jonblack.me/arduino-multitasking-using-finite-state-machines/
 
 # Contribution
 
