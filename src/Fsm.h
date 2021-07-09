@@ -26,6 +26,7 @@
 
 struct State
 {
+  State();
   State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
   void (*on_enter)();
   void (*on_state)();
@@ -45,10 +46,36 @@ public:
   void add_timed_transition(State* state_from, State* state_to,
                             unsigned long interval, void (*on_transition)());
 
+  /**
+   * checks the timed transitions for the current state and if timeout occurred
+   * trigger appropriate transition. Timed transitions are checked and triggered in the same order as added
+   */
   void check_timed_transitions();
 
+  /**
+   * trigger transition with the event 
+   * @param event enum that defines the trigger
+   * @param bool true (default) causes state transition to happen during the call to trigger (synchronously)
+   * @param bool false sets a flag such that the state transition will happen in the next call to run_machine()
+   */
   void trigger(int event, bool immediate=true);
+  
+  /**
+   * looks for the current state's timed transitions to the target state and reset the timer 
+   * @param state_to target state to reset the timed transition for. If nullptr reset all current state timers
+   */
+  void reset_timed_transition(State* state_to);
+
+  /**
+   * iterate one run-cycle of the state machine
+   */
   void run_machine();
+
+  /**
+   * returns current state (helpful if the same handler is used to drive many similar states)
+   * @return current state
+   */
+  State* get_current_state();
 
 private:
   struct Transition
