@@ -33,6 +33,7 @@ State::State(void (*on_enter)(), void (*on_state)(), void (*on_exit)())
 
 Fsm::Fsm(State* initial_state)
 : m_current_state(initial_state),
+  m_asynchronous_transition(nullptr),
   m_transitions(nullptr),
   m_num_transitions(0),
   m_timed_transitions(nullptr),
@@ -179,9 +180,9 @@ void Fsm::run_machine()
   if (m_current_state->on_state != NULL)
     m_current_state->on_state();
 
-  if(Fsm::m_synchronous_transition != NULL){
-    Fsm::make_transition(m_synchronous_transition);
-    m_synchronous_transition = NULL;
+  if(Fsm::m_asynchronous_transition != NULL){
+    Fsm::make_transition(m_asynchronous_transition);
+    m_asynchronous_transition = NULL;
   }
       
   Fsm::check_timed_transitions();
