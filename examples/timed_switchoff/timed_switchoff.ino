@@ -1,3 +1,6 @@
+// If using PlatformIO, see the platformio.ini file for instructions
+// on how to pick which sample to run
+
 #include "Fsm.h"
 
 /*
