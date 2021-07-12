@@ -11,22 +11,22 @@
 #define LED2_PIN 11
 
 void on_led1_on_enter() {
-    Serial.println("on_led1_on_enter");
+    Serial.println(F("on_led1_on_enter"));
     digitalWrite(LED1_PIN, HIGH);
 }
 
 void on_led1_off_enter() {
-    Serial.println("on_led1_off_enter");
+    Serial.println(F("on_led1_off_enter"));
     digitalWrite(LED1_PIN, LOW);
 }
 
 void on_led2_on_enter() {
-    Serial.println("on_led2_on_enter");
+    Serial.println(F("on_led2_on_enter"));
     digitalWrite(LED2_PIN, HIGH);
 }
 
 void on_led2_off_enter() {
-    Serial.println("on_led2_off_enter");
+    Serial.println(F("on_led2_off_enter"));
     digitalWrite(LED2_PIN, LOW);
 }
 

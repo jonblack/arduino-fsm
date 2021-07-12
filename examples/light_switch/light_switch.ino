@@ -13,32 +13,32 @@ Fsm fsm(&state_light_off);
 // Transition callback functions
 void on_light_on_enter()
 {
-  Serial.println("Entering LIGHT_ON");
+  Serial.println(F("Entering LIGHT_ON"));
 }
 
 void on_light_on_exit()
 {
-  Serial.println("Exiting LIGHT_ON");
+  Serial.println(F("Exiting LIGHT_ON"));
 }
 
 void on_light_off_enter()
 {
-  Serial.println("Entering LIGHT_OFF");
+  Serial.println(F("Entering LIGHT_OFF"));
 }
 
 void on_light_off_exit()
 {
-  Serial.println("Exiting LIGHT_OFF");
+  Serial.println(F("Exiting LIGHT_OFF"));
 }
 
 void on_trans_light_on_light_off()
 {
-  Serial.println("Transitioning from LIGHT_ON to LIGHT_OFF");
+  Serial.println(F("Transitioning from LIGHT_ON to LIGHT_OFF"));
 }
 
 void on_trans_light_off_light_on()
 {
-  Serial.println("Transitioning from LIGHT_OFF to LIGHT_ON");
+  Serial.println(F("Transitioning from LIGHT_OFF to LIGHT_ON"));
 }
 
 // standard arduino functions

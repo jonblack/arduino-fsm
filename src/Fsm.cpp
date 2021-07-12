@@ -113,12 +113,12 @@ void Fsm::trigger(int event, bool immediate)
       if (m_transitions[i].state_from == m_current_state &&
           m_transitions[i].event == event)
       {
-	if(immediate){
-	  Fsm::make_transition(&(m_transitions[i]));
-	}else{
-	  // queue state change
-	  Fsm::m_asynchronous_transition = &(m_transitions[i]);
-	}
+        if(immediate){
+          Fsm::make_transition(&(m_transitions[i]));
+        }else{
+          // queue state change
+          Fsm::m_asynchronous_transition = &(m_transitions[i]);
+        }
         return;
       }
     }

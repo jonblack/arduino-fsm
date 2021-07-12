@@ -32,13 +32,13 @@ Fsm fsm(&state_led_off);
 // Transition functions
 void led_off()
 {
-  Serial.println("led_off");
+  Serial.println(F("led_off"));
   digitalWrite(LED_PIN, LOW);
 }
 
 void led_on()
 {
-  Serial.println("led_on");
+  Serial.println(F("led_on"));
   digitalWrite(LED_PIN, HIGH);
 }
 
@@ -46,7 +46,7 @@ void check_button()
 {
   int buttonState = digitalRead(BUTTON_PIN);
   if (buttonState == LOW) {
-    Serial.println("button_pressed");
+    Serial.println(F("button_pressed"));
     fsm.trigger(BUTTON_EVENT);
   }
 }
@@ -63,7 +63,7 @@ void setup()
                      BUTTON_EVENT, NULL);
   fsm.add_timed_transition(&state_led_on, &state_led_off, 3000, NULL);
   fsm.add_transition(&state_led_on, &state_led_off, BUTTON_EVENT, NULL);
-  Serial.println("Setup END");
+  Serial.println(F("Setup END"));
 }
 
 void loop()
