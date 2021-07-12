@@ -197,11 +197,11 @@ void Fsm::make_transition(Transition* transition)
   if (transition->on_transition != NULL)
     transition->on_transition();
 
+  m_current_state = transition->state_to;
+
   if (transition->state_to->on_enter != NULL)
     transition->state_to->on_enter();
   
-  m_current_state = transition->state_to;
-
   //Initialice all timed transitions from m_current_state
   unsigned long now = millis();
   for (int i = 0; i < m_num_timed_transitions; ++i)
