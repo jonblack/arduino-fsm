@@ -45,6 +45,11 @@ void on_trans_light_off_light_on()
 void setup()
 {
   Serial.begin(9600);
+  while (!Serial && !Serial.available()) {
+  }
+  delay(1000);
+
+  Serial.println(F("starting light_switch example"));
 
   fsm.add_transition(&state_light_on, &state_light_off,
                      FLIP_LIGHT_SWITCH,
@@ -56,7 +61,8 @@ void setup()
 
 void loop()
 {
-  // No "fsm.run_machine()" call needed as no "on_state" funcions or timmed transitions exists
+  // "fsm.run_machine()" call needed because Fsm needs to be initialized
+  fsm.run_machine();
   delay(2000);
   fsm.trigger(FLIP_LIGHT_SWITCH);
   delay(2000);
