@@ -73,7 +73,7 @@ void Fsm::add_timed_transition(State* state_from, State* state_to,
   if (state_from == NULL || state_to == NULL)
     return;
 
-  Transition transition = Fsm::create_transition(state_from, state_to, 0,
+  Transition transition = create_transition(state_from, state_to, 0,
                                                  on_transition);
 
   TimedTransition timed_transition;
@@ -114,15 +114,32 @@ void Fsm::trigger(int event, bool immediate)
           m_transitions[i].event == event)
       {
         if(immediate){
-          Fsm::make_transition(&(m_transitions[i]));
+          make_transition(&(m_transitions[i]));
         }else{
           // queue state change
-          Fsm::m_asynchronous_transition = &(m_transitions[i]);
-        }
+          m_asynchronous_transition = &(m_transitions[i]);
+        }                                         
         return;
       }
     }
   }
+}
+
+bool Fsm::is_valid_event(int event)
+{
+  if (m_initialized)
+  {
+    // Find the transition with the current state and given event.
+    for (int i = 0; i < m_num_transitions; ++i)
+    {
+      if (m_transitions[i].state_from == m_current_state &&
+          m_transitions[i].event == event)
+      {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 State* Fsm::get_current_state() {
@@ -144,7 +161,7 @@ void Fsm::check_timed_transitions()
         unsigned long now = millis();
         if (now - transition->start >= transition->interval)
         {
-          Fsm::make_transition(&(transition->transition));
+          make_transition(&(transition->transition));
           transition->start = 0;
         }
       }
@@ -180,12 +197,12 @@ void Fsm::run_machine()
   if (m_current_state->on_state != NULL)
     m_current_state->on_state();
 
-  if(Fsm::m_asynchronous_transition != NULL){
-    Fsm::make_transition(m_asynchronous_transition);
+  if(m_asynchronous_transition != NULL){
+    make_transition(m_asynchronous_transition);
     m_asynchronous_transition = NULL;
   }
       
-  Fsm::check_timed_transitions();
+  check_timed_transitions();
 }
 
 void Fsm::make_transition(Transition* transition)

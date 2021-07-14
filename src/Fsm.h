@@ -61,6 +61,14 @@ public:
   void trigger(int event, bool immediate=true);
   
   /**
+   * @brief checks whether an event will cause a transition from the current state.
+   * 
+   * @param event enum that defines the event
+   * @return `true` if `event` is valid for the current state; `false` otherwise.
+   */
+  bool is_valid_event(int event);
+
+  /**
    * looks for the current state's timed transitions to the target state and reset the timer 
    * @param state_to target state to reset the timed transition for. If nullptr reset all current state timers
    */
