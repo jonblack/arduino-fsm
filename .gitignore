@@ -20,3 +20,9 @@ pix
 *~
 *.swp
 *.swo
+
+# VSCode
+.vscode
+
+# PlatformIO
+.pio

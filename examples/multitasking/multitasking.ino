@@ -1,29 +1,32 @@
+// If using PlatformIO, see the platformio.ini file for instructions
+// on how to pick which sample to run
+
 // This example shows how two finite state machines can be used to simulate
 // multitasking on an arduino. Two LED's are turned on and off at irregular
 // intervals; the finite state machines take care of the transitions.
 
-#include "Fsm.h"
+#include <Fsm.h>
 
 #define LED1_PIN 10
 #define LED2_PIN 11
 
 void on_led1_on_enter() {
-    Serial.println("on_led1_on_enter");
+    Serial.println(F("on_led1_on_enter"));
     digitalWrite(LED1_PIN, HIGH);
 }
 
 void on_led1_off_enter() {
-    Serial.println("on_led1_off_enter");
+    Serial.println(F("on_led1_off_enter"));
     digitalWrite(LED1_PIN, LOW);
 }
 
 void on_led2_on_enter() {
-    Serial.println("on_led2_on_enter");
+    Serial.println(F("on_led2_on_enter"));
     digitalWrite(LED2_PIN, HIGH);
 }
 
 void on_led2_off_enter() {
-    Serial.println("on_led2_off_enter");
+    Serial.println(F("on_led2_off_enter"));
     digitalWrite(LED2_PIN, LOW);
 }
 
