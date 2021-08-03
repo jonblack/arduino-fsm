@@ -146,8 +146,7 @@ void Fsm::run_machine()
 
 void Fsm::make_transition(Transition *transition)
 {
-  Serial.printf("Transition powerFSM transition=%s, from=%s to=%s\n", 
-    transition->name, transition->state_from->name, transition->state_to->name);
+  // Serial.printf("Transition powerFSM transition=%s, from=%s to=%s\n", transition->name, transition->state_from->name, transition->state_to->name);
 
   // Execute the handlers in the correct order.
   if (transition->state_from->on_exit != NULL)
