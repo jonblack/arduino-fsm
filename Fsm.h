@@ -16,34 +16,52 @@
 #ifndef FSM_H
 #define FSM_H
 
-
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+#include <Arduino.h>
 #else
-  #include <WProgram.h>
+#include <WProgram.h>
 #endif
-
 
 struct State
 {
-  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
+  State(void (*on_enter)(), void (*on_state)(), void (*on_exit)(), const char *name);
   void (*on_enter)();
   void (*on_state)();
   void (*on_exit)();
+  const char *name;
 };
 
+struct Transition
+{
+  State *state_from;
+  State *state_to;
+  int event;
+  void (*on_transition)();
+  const char *name;
+};
+
+struct TimedTransition
+{
+  Transition transition;
+  unsigned long start;
+  unsigned long interval;
+};
+
+#define MAX_TIMED_TRANSITIONS 8
 
 class Fsm
 {
 public:
-  Fsm(State* initial_state);
+  Fsm(State *initial_state);
   ~Fsm();
 
-  void add_transition(State* state_from, State* state_to, int event,
-                      void (*on_transition)());
+  void add_transition(State *state_from, State *state_to, int event,
+                      void (*on_transition)(), const char *name);
 
-  void add_timed_transition(State* state_from, State* state_to,
-                            unsigned long interval, void (*on_transition)());
+  TimedTransition *add_timed_transition(State *state_from, State *state_to,
+                            unsigned long interval, void (*on_transition)(), const char *name);
+
+  State *getState() const { return m_current_state; }
 
   void check_timed_transitions();
 
@@ -51,35 +69,19 @@ public:
   void run_machine();
 
 private:
-  struct Transition
-  {
-    State* state_from;
-    State* state_to;
-    int event;
-    void (*on_transition)();
+  static Transition create_transition(State *state_from, State *state_to,
+                                      int event, void (*on_transition)(), const char *name);
 
-  };
-  struct TimedTransition
-  {
-    Transition transition;
-    unsigned long start;
-    unsigned long interval;
-  };
-
-  static Transition create_transition(State* state_from, State* state_to,
-                                      int event, void (*on_transition)());
-
-  void make_transition(Transition* transition);
+  void make_transition(Transition *transition);
 
 private:
-  State* m_current_state;
-  Transition* m_transitions;
+  State *m_current_state;
+  Transition *m_transitions;
   int m_num_transitions;
 
-  TimedTransition* m_timed_transitions;
+  TimedTransition m_timed_transitions[MAX_TIMED_TRANSITIONS];
   int m_num_timed_transitions;
   bool m_initialized;
 };
-
 
 #endif
