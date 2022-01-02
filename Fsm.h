@@ -18,13 +18,13 @@
 
 
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+#include <Arduino.h>
 #else
-  #include <WProgram.h>
+#include <WProgram.h>
 #endif
 
 
-struct State
+struct State 
 {
   State(void (*on_enter)(), void (*on_state)(), void (*on_exit)());
   void (*on_enter)();
@@ -32,18 +32,23 @@ struct State
   void (*on_exit)();
 };
 
+bool _enabled(const State *from, const State *to);
 
-class Fsm
+typedef bool (*predicate)(const State *, const State *);
+
+class Fsm 
 {
 public:
-  Fsm(State* initial_state);
+  Fsm(State *initial_state);
   ~Fsm();
 
-  void add_transition(State* state_from, State* state_to, int event,
-                      void (*on_transition)());
+  void add_transition(State *state_from, State *state_to, int event,
+                      void (*on_transition)(),
+                      predicate precondition = _enabled);
 
-  void add_timed_transition(State* state_from, State* state_to,
-                            unsigned long interval, void (*on_transition)());
+  void add_timed_transition(State *state_from, State *state_to,
+                            unsigned long interval, void (*on_transition)(),
+                            predicate precondition = _enabled);
 
   void check_timed_transitions();
 
@@ -51,32 +56,33 @@ public:
   void run_machine();
 
 private:
-  struct Transition
+  struct Transition 
   {
-    State* state_from;
-    State* state_to;
+    State *state_from;
+    State *state_to;
     int event;
     void (*on_transition)();
-
+    predicate precondition;
   };
-  struct TimedTransition
+  struct TimedTransition 
   {
     Transition transition;
     unsigned long start;
     unsigned long interval;
   };
 
-  static Transition create_transition(State* state_from, State* state_to,
-                                      int event, void (*on_transition)());
+  static Transition create_transition(State *state_from, State *state_to,
+                                      int event, void (*on_transition)(),
+                                      predicate precondition);
 
-  void make_transition(Transition* transition);
+  void make_transition(Transition *transition);
 
 private:
-  State* m_current_state;
-  Transition* m_transitions;
+  State *m_current_state;
+  Transition *m_transitions;
   int m_num_transitions;
 
-  TimedTransition* m_timed_transitions;
+  TimedTransition *m_timed_transitions;
   int m_num_timed_transitions;
   bool m_initialized;
 };
