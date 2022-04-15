@@ -16,7 +16,7 @@
 #include "Fsm.h"
 
 int State::_next_id = 0;
-
+  
 State::State(String name, CallbackFunction on_enter, CallbackFunction on_state, CallbackFunction on_exit) :
   name(name),
   on_enter(on_enter),
