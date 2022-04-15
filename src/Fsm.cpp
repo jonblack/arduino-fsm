@@ -1,3 +1,5 @@
+/////////////////////////////////////////////////////////////////
+
 // This file is part of arduino-fsm.
 //
 // arduino-fsm is free software: you can redistribute it and/or modify it under
@@ -13,9 +15,15 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with arduino-fsm.  If not, see <http://www.gnu.org/licenses/>.
 
+/////////////////////////////////////////////////////////////////
+
 #include "Fsm.h"
 
+/////////////////////////////////////////////////////////////////
+
 int State::_next_id = 0;
+
+/////////////////////////////////////////////////////////////////
 
 State::State(String name, CallbackFunction on_enter, CallbackFunction on_state, CallbackFunction on_exit) :
   name(name),
@@ -24,6 +32,8 @@ State::State(String name, CallbackFunction on_enter, CallbackFunction on_state, 
   on_exit(on_exit),
   id(_next_id++)
   {}
+
+/////////////////////////////////////////////////////////////////
 
 Fsm::Fsm(State* initial_state) :
   m_current_state(initial_state),
@@ -35,6 +45,8 @@ Fsm::Fsm(State* initial_state) :
   m_on_transition(NULL)
   {}
 
+/////////////////////////////////////////////////////////////////
+
 Fsm::~Fsm() {
   free(m_transitions);
   free(m_timed_transitions);
@@ -42,9 +54,13 @@ Fsm::~Fsm() {
   m_timed_transitions = NULL;
 }
 
+/////////////////////////////////////////////////////////////////
+
 void Fsm::on_transition(CallbackFunction f) {
   m_on_transition = f;
 }
+
+/////////////////////////////////////////////////////////////////
 
 void Fsm::add_transition(State* state_from, State* state_to, int event, CallbackFunction on_transition, String name) {
   if (state_from == NULL || state_to == NULL) {
@@ -59,6 +75,8 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, Callback
     m_dot_definition +
     create_dot_transition(state_from->name, state_to->name, name);
 }
+
+/////////////////////////////////////////////////////////////////
 
 void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long interval, CallbackFunction on_transition, String name) {
   if (state_from == NULL || state_to == NULL) {
@@ -79,6 +97,8 @@ void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long
     create_dot_transition(state_from->name, state_to->name, name + " (" + String(interval) + ")");
 }
 
+/////////////////////////////////////////////////////////////////
+
 Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int event, CallbackFunction on_transition) {
   Transition t;
   t.state_from = state_from;
@@ -87,6 +107,8 @@ Fsm::Transition Fsm::create_transition(State* state_from, State* state_to, int e
   t.on_transition = on_transition;
   return t;
 }
+
+/////////////////////////////////////////////////////////////////
 
 void Fsm::trigger(int event) {
   if (m_initialized) {
@@ -99,6 +121,8 @@ void Fsm::trigger(int event) {
     }
   }
 }
+
+/////////////////////////////////////////////////////////////////
 
 void Fsm::check_timed_transitions() {
   for (int i = 0; i < m_num_timed_transitions; i++) {
@@ -117,9 +141,13 @@ void Fsm::check_timed_transitions() {
   }
 }
 
+/////////////////////////////////////////////////////////////////
+
 State* Fsm::get_current_state() {
   return m_current_state;
 }
+
+/////////////////////////////////////////////////////////////////
 
 void Fsm::run_machine() {
   // first run must exec first state "on_enter"
@@ -161,6 +189,8 @@ void Fsm::make_transition(Transition* transition) {
   }
 }
 
+/////////////////////////////////////////////////////////////////
+
 String Fsm::get_dot_definition() {
   return
     "digraph G {\n" +
@@ -170,6 +200,8 @@ String Fsm::get_dot_definition() {
     "}\n";
 }
 
+/////////////////////////////////////////////////////////////////
+
 String Fsm::create_dot_transition(String from, String to, String label) {
   return "\t\"" +
     from + "\" -> \"" + to + "\"" +
@@ -177,15 +209,22 @@ String Fsm::create_dot_transition(String from, String to, String label) {
     ";\n";
 }
 
+/////////////////////////////////////////////////////////////////
+
 String Fsm::create_dot_inital_state(String name) {
   return "\t\"" + name + "\" [shape=doublecircle];\n\n";
 }
 
+/////////////////////////////////////////////////////////////////
 
 String Fsm::create_dot_active_node() {
   return "\t\"" + m_current_state->name + "\" [style=filled fillcolor=black fontcolor=white];\n";
 }
 
+/////////////////////////////////////////////////////////////////
+
 String Fsm::create_dot_header() {
   return "\trankdir=LR;\n\tnode [shape=circle];\n";
 }
+
+/////////////////////////////////////////////////////////////////
