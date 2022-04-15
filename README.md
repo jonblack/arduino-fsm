@@ -22,7 +22,7 @@ feature branch.
 
 # Changelog
 
-**Unreleased **
+**Unreleased**
 
 * Added `id` member to `State` struct
 * Updated [fsm_graph.ino](https://github.com/LennartHennigs/arduino-fsm/blob/master/examples/fsm_graph/fsm_graph.ino) example to explain naming
