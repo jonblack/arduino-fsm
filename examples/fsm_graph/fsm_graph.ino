@@ -26,9 +26,10 @@ void on_green() {
 
 /////////////////////////////////////////////////////////////////
 
+// by giving the two states the same name, the graph will only show three nodes
+State state_yellow_from_red("yellow", on_yellow);
+State state_yellow_from_green("yellow", on_yellow);
 State state_red_light("red", on_red);
-State state_yellow_from_red("yellow (red)", on_yellow);
-State state_yellow_from_green("yellow (green)", on_yellow);
 State state_green_light("green", on_green);
 Fsm fsm(&state_red_light);
 
@@ -54,12 +55,14 @@ void setup() {
   while (!Serial) {
     delay(50);
   }
-  Serial.println("\RUNNING: graph visualizationn\n");
+  Serial.println();
+  Serial.println();
+  Serial.println("RUNNING: graph visualization\n");
 
-  fsm.add_timed_transition(&state_red_light, &state_yellow_from_red, 6000);
-  fsm.add_timed_transition(&state_yellow_from_red, &state_green_light, 1000);
-  fsm.add_timed_transition(&state_green_light, &state_yellow_from_green, 6000);
-  fsm.add_timed_transition(&state_yellow_from_green, &state_red_light, 2000, NULL, "test");
+  fsm.add_timed_transition(&state_red_light, &state_yellow_from_red, 6000, NULL, "to yellow");
+  fsm.add_timed_transition(&state_yellow_from_red, &state_green_light, 1000, NULL, "to green");
+  fsm.add_timed_transition(&state_green_light, &state_yellow_from_green, 6000, NULL, "to yellow");
+  fsm.add_timed_transition(&state_yellow_from_green, &state_red_light, 2000, NULL, "to red");
 
   Serial.println(fsm.get_dot_definition());
 
