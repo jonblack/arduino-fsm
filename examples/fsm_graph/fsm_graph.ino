@@ -67,9 +67,9 @@ void setup() {
   Serial.println(fsm.get_dot_definition());
 
   if (connectToWiFi(WIFI_SSID, WIFI_PASSWD, 10000)) {
-    Serial.print("Open http://");
+    Serial.print("Open <a href="">http://");
     Serial.print(WiFi.localIP());
-    Serial.print(" in your browser.\n");
+    Serial.print("</a> in your browser.\n");
 
     server.on( "/", showGraph);
     server.onNotFound(handleNotFound);
