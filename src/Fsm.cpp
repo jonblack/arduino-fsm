@@ -16,7 +16,7 @@
 #include "Fsm.h"
 
 int State::_next_id = 0;
-  
+
 State::State(String name, CallbackFunction on_enter, CallbackFunction on_state, CallbackFunction on_exit) :
   name(name),
   on_enter(on_enter),
@@ -143,10 +143,10 @@ void Fsm::make_transition(Transition* transition) {
   if (transition->on_transition != NULL) {
     transition->on_transition();
   }
+  m_current_state = transition->state_to;
   if (transition->state_to->on_enter != NULL) {
       transition->state_to->on_enter();
   }
-  m_current_state = transition->state_to;
 
   // Initialice all timed transitions from m_current_state
   unsigned long now = millis();
