@@ -22,7 +22,12 @@ feature branch.
 
 # Changelog
 
-**2.3.0 - 01/04/2018 (L. Hennigs)**
+** Unreleased
+* Added `id` member to `State` struct
+* Updated [fsm_graph.ino](https://github.com/LennartHennigs/arduino-fsm/blob/master/examples/fsm_graph/fsm_graph.ino) example to explain naming
+*Fix `make_transition()` as mentioned in [[#22](https://github.com/jonblack/arduino-fsm/issues/22)] and [#35](https://github.com/jonblack/arduino-fsm/issues/35)
+
+** 2.3.0 - 01/04/2018 (L. Hennigs)**
 * Added `get_dot_definition()` function to FSM to get the FSM graph in [.dot syntax](http://graphs.grevian.org/example)
 * Added `get_current_state()` function to FSM
 * Added `on_transition()` function to FSM
