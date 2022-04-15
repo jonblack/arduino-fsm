@@ -26,11 +26,14 @@ typedef void (*CallbackFunction) ();
 
 
 struct State {
-  State(String name, CallbackFunction on_enter, CallbackFunction on_state = NULL, CallbackFunction on_exit = NULL);
-  String name;
-  CallbackFunction on_enter;
-  CallbackFunction on_state;
-  CallbackFunction on_exit;
+    State(String name, CallbackFunction on_enter, CallbackFunction on_state = NULL, CallbackFunction on_exit = NULL);  
+    String name;
+    CallbackFunction on_enter;
+    CallbackFunction on_state;
+    CallbackFunction on_exit; 
+      int id;
+    private:
+      static int _next_id;
 };
 
 
