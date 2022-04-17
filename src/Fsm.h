@@ -69,19 +69,19 @@ class Fsm {
     static Transition create_transition(State* state_from, State* state_to, int event, CallbackFunction on_transition);
     void make_transition(Transition* transition);
 
-    State* m_current_state;
-    Transition* m_transitions;
-    int m_num_transitions;
-    CallbackFunction m_on_transition;
-
-    TimedTransition* m_timed_transitions;
-    int m_num_timed_transitions;
-    bool m_initialized;
-
-    String create_dot_transition(String from, String to, String label = "");
+    String create_dot_transition(String from, String to, String label, String param);
     String create_dot_active_node();
     String create_dot_header();
     String create_dot_inital_state(String name);
+
+    State* m_current_state;
+    Transition* m_transitions;
+    
+    CallbackFunction m_on_transition;
+    TimedTransition* m_timed_transitions;
+    int m_num_timed_transitions;
+    int m_num_transitions;
+    bool m_initialized;
     String m_dot_definition;
 };
 

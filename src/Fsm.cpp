@@ -73,7 +73,7 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, Callback
 
   m_dot_definition =
     m_dot_definition +
-    create_dot_transition(state_from->name, state_to->name, name);
+    create_dot_transition(state_from->name, state_to->name, name, "#" + String(event));
 }
 
 /////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ void Fsm::add_timed_transition(State* state_from, State* state_to, unsigned long
 
   m_dot_definition =
     m_dot_definition +
-    create_dot_transition(state_from->name, state_to->name, name + " (" + String(interval) + ")");
+    create_dot_transition(state_from->name, state_to->name, name, String(interval) + "ms");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -202,11 +202,9 @@ String Fsm::get_dot_definition() {
 
 /////////////////////////////////////////////////////////////////
 
-String Fsm::create_dot_transition(String from, String to, String label) {
+String Fsm::create_dot_transition(String from, String to, String label, String param) {
   return "\t\"" +
-    from + "\" -> \"" + to + "\"" +
-    ((label != "") ? String(" [label=\"" + label + "\"]") : "") +
-    ";\n";
+    from + "\" -> \"" + to + "\"" +  " [label=\"" + label + " (" + param + ")\"];\n";
 }
 
 /////////////////////////////////////////////////////////////////
