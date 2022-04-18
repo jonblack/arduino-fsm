@@ -73,7 +73,7 @@ void Fsm::add_transition(State* state_from, State* state_to, int event, Callback
 
   m_dot_definition =
     m_dot_definition +
-    create_dot_transition(state_from->name, state_to->name, name, "#" + String(event));
+    create_dot_transition(state_from->name, state_to->name, name, "ID=" + String(event));
 }
 
 /////////////////////////////////////////////////////////////////
