@@ -1,3 +1,8 @@
+
+**Note**: I built my own state machine called [SimpleFSM](https://github.com/LennartHennigs/SimpleFSM). You might want to check it out.
+
+---
+
 An arduino library for implementing a finite state machine.
 
 # Documentation
